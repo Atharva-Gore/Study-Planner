@@ -1,6 +1,6 @@
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("planner-cache").then(cache => {
+    caches.open("study-planner-cache").then(cache => {
       return cache.addAll([
         "/",
         "index.html",
