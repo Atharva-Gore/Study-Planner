@@ -4,24 +4,14 @@ const taskList = document.getElementById('taskList');
 const toggleMode = document.getElementById('toggleMode');
 const searchInput = document.getElementById('searchInput');
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let darkMode = localStorage.getItem("darkMode") === "true";
 
-let tasks = [];
-let darkMode = localStorage.getItem('darkMode') === 'true';
-
-if (darkMode) document.body.classList.add('dark');
+if (darkMode) document.body.classList.add("dark");
 
 toggleMode.onclick = () => {
-  darkMode = !darkMode;
-  document.body.classList.toggle('dark');
-  localStorage.setItem('darkMode', darkMode);
+  document.body.classList.toggle("dark");
+  localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 };
 
 function saveTasks() {
@@ -31,10 +21,13 @@ function saveTasks() {
 function renderTasks() {
   const filter = searchInput.value.toLowerCase();
   taskList.innerHTML = '';
+
   tasks.forEach((task, index) => {
     if (!task.text.toLowerCase().includes(filter)) return;
+
     const li = document.createElement('li');
     li.className = task.done ? 'done' : '';
+
     const span = document.createElement('span');
     span.innerText = `${task.text} ${task.date ? `(Due: ${task.date})` : ''}`;
 
@@ -46,18 +39,16 @@ function renderTasks() {
     doneBtn.onclick = () => {
       task.done = !task.done;
       saveTasks();
-      db.ref('tasks/' + task.id).set(task);
       renderTasks();
     };
 
     const editBtn = document.createElement('button');
     editBtn.innerText = '✏️';
     editBtn.onclick = () => {
-      const newTask = prompt('Edit Task:', task.text);
-      if (newTask) {
-        task.text = newTask;
+      const newText = prompt('Edit task:', task.text);
+      if (newText) {
+        task.text = newText;
         saveTasks();
-        db.ref('tasks/' + task.id).set(task);
         renderTasks();
       }
     };
@@ -67,7 +58,6 @@ function renderTasks() {
     delBtn.onclick = () => {
       tasks.splice(index, 1);
       saveTasks();
-      db.ref('tasks/' + task.id).remove();
       renderTasks();
     };
 
@@ -78,43 +68,43 @@ function renderTasks() {
 }
 
 function addTask() {
-  if (!taskInput.value.trim()) return;
+  const text = taskInput.value.trim();
+  const date = taskDate.value;
+
+  if (!text) return;
+
   const newTask = {
     id: Date.now(),
-    text: taskInput.value.trim(),
-    date: taskDate.value,
+    text,
+    date,
     done: false,
     notified: false
   };
+
   tasks.push(newTask);
+  saveTasks();
+  renderTasks();
+
   taskInput.value = '';
   taskDate.value = '';
-  saveTasks();
-  db.ref('tasks/' + newTask.id).set(newTask);
-  renderTasks();
 }
 
 searchInput.addEventListener('input', renderTasks);
+renderTasks();
 
-firebase.database().ref('tasks').on('value', snapshot => {
-  tasks = [];
-  snapshot.forEach(child => tasks.push(child.val()));
-  saveTasks();
-  renderTasks();
-});
-
+// Optional: Notify user if task is due today
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
+
 function checkDueTasks() {
   const today = new Date().toISOString().split("T")[0];
   tasks.forEach(task => {
     if (!task.notified && task.date === today) {
-      new Notification("Due Today!", { body: task.text });
+      new Notification("📌 Task Due Today!", { body: task.text });
       task.notified = true;
       saveTasks();
-      db.ref('tasks/' + task.id).set(task);
     }
   });
 }
-setInterval(checkDueTasks, 60 * 60 * 1000);
+setInterval(checkDueTasks, 60 * 60 * 1000); // check every hour
