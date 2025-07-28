@@ -92,7 +92,7 @@ function addTask() {
 searchInput.addEventListener('input', renderTasks);
 renderTasks();
 
-// Notifications (optional)
+// Optional: Notifications
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
@@ -107,4 +107,4 @@ function checkDueTasks() {
     }
   });
 }
-setInterval(checkDueTasks, 60 * 60 * 1000); // check every hour
+setInterval(checkDueTasks, 60 * 60 * 1000);
