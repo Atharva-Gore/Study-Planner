@@ -92,7 +92,7 @@ function addTask() {
 searchInput.addEventListener('input', renderTasks);
 renderTasks();
 
-// Optional: Notify user if task is due today
+// Notifications (optional)
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
