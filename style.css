@@ -3,11 +3,13 @@
   --text: #111111;
   --card: #f2f2f2;
 }
+
 body.dark {
   --bg: #121212;
   --text: #ffffff;
   --card: #1e1e1e;
 }
+
 body {
   background-color: var(--bg);
   color: var(--text);
@@ -15,6 +17,7 @@ body {
   margin: 0;
   padding: 20px;
 }
+
 .container {
   max-width: 600px;
   margin: auto;
@@ -23,28 +26,35 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 15px #ccc;
 }
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .input-group {
   display: flex;
   gap: 10px;
   margin: 20px 0;
+  flex-wrap: wrap;
 }
+
 input, button {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
 button {
   cursor: pointer;
 }
+
 ul {
   list-style: none;
   padding: 0;
 }
+
 li {
   background: var(--bg);
   margin-bottom: 10px;
@@ -53,11 +63,14 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid #ccc;
 }
+
 li.done span {
   text-decoration: line-through;
   color: gray;
 }
+
 .task-buttons button {
   margin-left: 5px;
 }
