@@ -1,41 +1,63 @@
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --card: #f2f2f2;
+}
+body.dark {
+  --bg: #121212;
+  --text: #ffffff;
+  --card: #1e1e1e;
+}
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f1f1f1;
-  text-align: center;
-}
-
-.container {
-  margin: 50px auto;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+  margin: 0;
   padding: 20px;
-  max-width: 500px;
-  background: #fff;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: var(--card);
   border-radius: 10px;
-  box-shadow: 0 0 10px #ccc;
+  box-shadow: 0 0 15px #ccc;
 }
-
-input {
-  width: 70%;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+input, button {
   padding: 10px;
-  margin-right: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
-
 button {
-  padding: 10px;
-}
-
-li {
-  list-style: none;
-  margin: 10px 0;
-}
-
-li span {
-  margin-right: 10px;
-}
-
-.delete-btn {
-  background: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
   cursor: pointer;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  background: var(--bg);
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+li.done span {
+  text-decoration: line-through;
+  color: gray;
+}
+.task-buttons button {
+  margin-left: 5px;
 }
